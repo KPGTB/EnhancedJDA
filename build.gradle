@@ -1,0 +1,22 @@
+plugins {
+    id "java-library"
+    id "io.freefair.lombok" version "8.11"
+}
+
+group = "eu.kpgtb.enhanced"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    api "net.dv8tion:JDA:5.2.1"
+    api 'io.github.cdimascio:dotenv-java:3.1.0'
+    api "com.j256.ormlite:ormlite-jdbc:6.1"
+    api 'com.google.code.gson:gson:2.11.0'
+
+    implementation "ch.qos.logback:logback-classic:1.5.6"
+    implementation 'org.xerial:sqlite-jdbc:3.47.1.0'
+    implementation 'mysql:mysql-connector-java:8.0.33'
+}
