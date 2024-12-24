@@ -3,7 +3,7 @@ plugins {
     id "io.freefair.lombok" version "8.11"
 }
 
-group = "eu.kpgtb.enhanced"
+group = "dev.projectenhanced"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -19,4 +19,6 @@ dependencies {
     implementation "ch.qos.logback:logback-classic:1.5.6"
     implementation 'org.xerial:sqlite-jdbc:3.47.1.0'
     implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
 }
