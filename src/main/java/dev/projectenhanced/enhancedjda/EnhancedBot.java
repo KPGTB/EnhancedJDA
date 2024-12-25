@@ -1,12 +1,10 @@
 package dev.projectenhanced.enhancedjda;
 
+import dev.projectenhanced.enhancedjda.controller.PackageMapping;
 import dev.projectenhanced.enhancedjda.controller.command.CommandController;
-import dev.projectenhanced.enhancedjda.controller.command.annotation.EnableCommands;
 import dev.projectenhanced.enhancedjda.controller.command.component.ComponentController;
 import dev.projectenhanced.enhancedjda.discord.EnableCaching;
-import dev.projectenhanced.enhancedjda.controller.data.EnableDatabase;
 import dev.projectenhanced.enhancedjda.discord.EnableIntents;
-import dev.projectenhanced.enhancedjda.controller.listener.EnableListeners;
 import dev.projectenhanced.enhancedjda.controller.data.DataController;
 import dev.projectenhanced.enhancedjda.controller.listener.ListenerController;
 import dev.projectenhanced.enhancedjda.logger.EnhancedLogger;
@@ -40,12 +38,15 @@ public class EnhancedBot {
     private final Dotenv dotenv;
     private final ShardManager shardManager;
 
+    private final PackageMapping packageMapping;
+
     protected static void runBot(Class<? extends EnhancedBot> botClass) throws ReflectiveOperationException {
         bot = botClass.getDeclaredConstructor().newInstance();
     }
 
     protected EnhancedBot() {
         System.setErr(new PrintStream(new LoggingOutputStream(EnhancedLogger.getErrorLogger(),Level.ERROR)));
+        this.packageMapping = getClass().getDeclaredAnnotation(PackageMapping.class);
 
         if(!new File(".env").exists()) FileUtil.saveResource(".env");
         this.dotenv = Dotenv.configure().load();
@@ -74,15 +75,15 @@ public class EnhancedBot {
 
         this.commandController = new CommandController(this);
         enableCommands();
+        enableContexts();
     }
 
     private void enableListeners() {
         List<String> listenerPackages = new ArrayList<>();
         listenerPackages.add(this.enhancedPackage + ".listener");
 
-        EnableListeners annotation = getClass().getDeclaredAnnotation(EnableListeners.class);
-        if(annotation != null) {
-            for (String pkg : annotation.value()) {
+        if(packageMapping != null) {
+            for (String pkg : packageMapping.listeners()) {
                 listenerPackages.add(this.botPackage + "." + pkg);
             }
         }
@@ -91,9 +92,14 @@ public class EnhancedBot {
     }
 
     private void enableCommands() {
-        EnableCommands annotation = getClass().getDeclaredAnnotation(EnableCommands.class);
-        if(annotation != null) {
-            Arrays.stream(annotation.value()).map(pkg -> this.botPackage + "." + pkg).forEach(this.commandController::registerCommands);
+        if(packageMapping != null) {
+            Arrays.stream(packageMapping.commands()).map(pkg -> this.botPackage + "." + pkg).forEach(this.commandController::registerCommands);
+        }
+    }
+
+    private void enableContexts() {
+        if(packageMapping != null) {
+            Arrays.stream(packageMapping.contexts()).map(pkg -> this.botPackage + "." + pkg).forEach(this.commandController::registerContexts);
         }
     }
 
@@ -114,16 +120,15 @@ public class EnhancedBot {
     }
 
     private void enableDatabase() {
-        EnableDatabase annotation = getClass().getDeclaredAnnotation(EnableDatabase.class);
-        if(annotation != null) {
+        if(packageMapping != null) {
             this.dataController.enable();
 
             List<String> persisterPackages = new ArrayList<>();
             persisterPackages.add(this.enhancedPackage + ".controller.data.persister.base");
-            persisterPackages.addAll(Arrays.stream(annotation.persisters()).map(pkg -> this.botPackage + "." + pkg).toList());
+            persisterPackages.addAll(Arrays.stream(packageMapping.persisters()).map(pkg -> this.botPackage + "." + pkg).toList());
             persisterPackages.forEach(this.dataController::registerPersisters);
 
-            Arrays.stream(annotation.tables()).map(pkg -> this.botPackage + "." + pkg).forEach(this.dataController::registerTables);
+            Arrays.stream(packageMapping.tables()).map(pkg -> this.botPackage + "." + pkg).forEach(this.dataController::registerTables);
         }
     }
 

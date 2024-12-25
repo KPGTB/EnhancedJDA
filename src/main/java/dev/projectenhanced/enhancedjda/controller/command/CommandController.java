@@ -1,7 +1,6 @@
 package dev.projectenhanced.enhancedjda.controller.command;
 
 import dev.projectenhanced.enhancedjda.EnhancedBot;
-import dev.projectenhanced.enhancedjda.controller.listener.EnhancedListener;
 import dev.projectenhanced.enhancedjda.logger.EnhancedLogger;
 import dev.projectenhanced.enhancedjda.util.ReflectionUtil;
 import net.dv8tion.jda.api.entities.Guild;
@@ -57,6 +56,36 @@ public class CommandController extends ListenerAdapter {
                 });
 
         EnhancedLogger.getLogger().info("Registered {}/{} commands from {}. Errors: {}", ref.registered,ref.found,packageName,ref.errors);
+    }
+
+    public void registerContexts(String packageName) {
+        var ref = new Object() {
+            int registered = 0;
+            int found = 0;
+            int errors = 0;
+        };
+
+        ReflectionUtil.getAllClassesInPackage(bot.getClass(), packageName, EnhancedContext.class)
+                .forEach(clazz -> {
+                    ref.found++;
+                    try {
+                        EnhancedContext context = (EnhancedContext) clazz.getDeclaredConstructor(EnhancedBot.class).newInstance(this.bot);
+                        ref.registered++;
+
+                        if(context.getGuilds().isEmpty()) {
+                            this.globalCommands.add(context.getData());
+                        } else {
+                            this.guildCommands.put(context.getData(), context.getGuilds());
+                        }
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                             NoSuchMethodException e) {
+                        ref.errors++;
+                        EnhancedLogger.getLogger().error("Error when registering context from {}", clazz.getName());
+                        e.printStackTrace();
+                    }
+                });
+
+        EnhancedLogger.getLogger().info("Registered {}/{} contexts from {}. Errors: {}", ref.registered,ref.found,packageName,ref.errors);
     }
 
     @Override
