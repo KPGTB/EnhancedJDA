@@ -1,5 +1,6 @@
 package dev.projectenhanced.enhancedjda.util;
 
+import dev.projectenhanced.enhancedjda.EnhancedBot;
 import lombok.SneakyThrows;
 
 import java.io.File;
@@ -13,7 +14,7 @@ public class FileUtil {
         File file = new File(name);
         if(file.exists()) return;
 
-        InputStream is = FileUtil.class.getResourceAsStream(name);
+        InputStream is = EnhancedBot.class.getResourceAsStream("/" + name);
         if(is == null) return;
 
         Files.copy(is, file.toPath(), StandardCopyOption.REPLACE_EXISTING);

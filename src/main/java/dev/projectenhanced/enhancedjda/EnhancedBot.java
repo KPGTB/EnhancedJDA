@@ -22,6 +22,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 
 @Getter
 public class EnhancedBot {
@@ -48,7 +49,13 @@ public class EnhancedBot {
         System.setErr(new PrintStream(new LoggingOutputStream(EnhancedLogger.getErrorLogger(),Level.ERROR)));
         this.packageMapping = getClass().getDeclaredAnnotation(PackageMapping.class);
 
-        if(!new File(".env").exists()) FileUtil.saveResource(".env");
+        File envFile = new File(".env");
+        if(!envFile.exists()) {
+            FileUtil.saveResource(".env");
+            EnhancedLogger.getLogger().error("Created file .env ("+envFile.getAbsolutePath()+") - please configure it!");
+            new Scanner(System.in).nextLine();
+            System.exit(0);
+        }
         this.dotenv = Dotenv.configure().load();
 
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(dotenv.get("TOKEN"));
