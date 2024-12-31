@@ -27,6 +27,9 @@ dependencies {
 java {
     withSourcesJar()
     withJavadocJar()
+
+    sourceCompatibility = 17
+    targetCompatibility = 17
 }
 
 shadowJar {
