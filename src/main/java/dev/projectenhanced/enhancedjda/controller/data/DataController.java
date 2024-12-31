@@ -35,6 +35,9 @@ public class DataController {
         this.daosMap = new HashMap<>();
     }
 
+    /**
+     * Enable database
+     */
     public void enable() {
         EnhancedLogger.getLogger().info("Connecting to database...");
         String databaseStr = this.bot.getDotenv().get("DATABASE");
@@ -75,6 +78,10 @@ public class DataController {
         EnhancedLogger.getLogger().info("Connected to database");
     }
 
+    /**
+     * Register all persisters from specified package
+     * @param packageName Name of package with persisters
+     */
     public void registerPersisters(String packageName) {
         if(this.connectionSource == null) {
             return;

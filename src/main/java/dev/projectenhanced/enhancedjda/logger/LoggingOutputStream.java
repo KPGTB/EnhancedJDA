@@ -5,6 +5,9 @@ import org.slf4j.event.Level;
 
 import java.io.OutputStream;
 
+/**
+ * OutputStream used for System.err logger
+ */
 public class LoggingOutputStream extends OutputStream {
     private static final int BUFFER_SIZE = 2048;
     private final Logger logger;

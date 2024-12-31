@@ -6,6 +6,9 @@ import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.Map;
 
+/**
+ * Util to create list and map persisters
+ */
 public class CollectionUtil {
     public static final String NEXT_IDENTIFIER = ">";
     public static final String MAP_ENTRY_SPLIT = "___";

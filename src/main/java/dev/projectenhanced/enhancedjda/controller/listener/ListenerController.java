@@ -14,6 +14,10 @@ public class ListenerController {
         this.bot = bot;
     }
 
+    /**
+     * Register all listeners in certain package
+     * @param packageName Name of package
+     */
     public void registerListeners(String packageName) {
         var ref = new Object() {
             int registered = 0;

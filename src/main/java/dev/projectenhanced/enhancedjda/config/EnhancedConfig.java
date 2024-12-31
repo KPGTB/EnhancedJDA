@@ -6,7 +6,16 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Util class to easily manage config
+ */
 public class EnhancedConfig {
+    /**
+     * Write object to config
+     * @param configName Name of config file
+     * @param data Data to write
+     * @param <T>
+     */
     public static <T> void write(String configName, T data) {
         File configFolder = new File("./config");
         configFolder.mkdirs();
@@ -20,6 +29,13 @@ public class EnhancedConfig {
         }
     }
 
+    /**
+     * Read data from config
+     * @param configName Name of config
+     * @param expected Class that is expected as output
+     * @return Data from config or null
+     * @param <T>
+     */
     public static <T> T read(String configName, Class<T> expected) {
         File configFolder = new File("./config");
         File file = new File(configFolder,configName + ".yml");

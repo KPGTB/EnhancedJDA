@@ -41,6 +41,11 @@ public class EnhancedBot {
 
     private final PackageMapping packageMapping;
 
+    /**
+     * Method used to run the bot
+     * @param botClass Main class of bot. It needs to extend EnhancedBot class
+     * @throws ReflectiveOperationException
+     */
     protected static void runBot(Class<? extends EnhancedBot> botClass) throws ReflectiveOperationException {
         bot = botClass.getDeclaredConstructor().newInstance();
     }
@@ -143,9 +148,26 @@ public class EnhancedBot {
         if(this.dataController != null) this.dataController.close();
     }
 
+    /**
+     * Method invoked just before building shard manager. You can modify builder
+     * @param builder
+     */
     public void preBuild(DefaultShardManagerBuilder builder) {}
+
+    /**
+     * Method invoked just after building shard manager. You can modify it
+     * @param shardManager
+     */
     public void postBuild(ShardManager shardManager) {}
 
+    /**
+     * Method invoked when bot is ready
+     * @param event ReadyEvent
+     */
     public void onReady(ReadyEvent event) {}
+
+    /**
+     * Method invoked just before shutdown
+     */
     public void onShutdown() {}
 }

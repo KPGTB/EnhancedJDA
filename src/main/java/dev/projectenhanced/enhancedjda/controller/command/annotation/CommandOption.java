@@ -4,6 +4,9 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 
 import java.lang.annotation.*;
 
+/**
+ * Add option to command
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Repeatable(value = CommandOptions.class)

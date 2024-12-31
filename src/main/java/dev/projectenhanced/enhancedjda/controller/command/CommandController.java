@@ -28,6 +28,10 @@ public class CommandController extends ListenerAdapter {
         bot.getShardManager().addEventListener(this);
     }
 
+    /**
+     * Register all commands from specified package
+     * @param packageName Name of that package
+     */
     public void registerCommands(String packageName) {
         var ref = new Object() {
             int registered = 0;
@@ -58,6 +62,10 @@ public class CommandController extends ListenerAdapter {
         EnhancedLogger.getLogger().info("Registered {}/{} commands from {}. Errors: {}", ref.registered,ref.found,packageName,ref.errors);
     }
 
+    /**
+     * Register all contexts from specified package
+     * @param packageName Name of that package
+     */
     public void registerContexts(String packageName) {
         var ref = new Object() {
             int registered = 0;

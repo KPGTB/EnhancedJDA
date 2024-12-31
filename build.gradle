@@ -1,5 +1,6 @@
 plugins {
     id "java-library"
+    id "com.github.johnrengelman.shadow" version "8.1.1"
     id "io.freefair.lombok" version "8.11"
 }
 
@@ -22,3 +23,15 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
 }
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+shadowJar {
+    archiveFileName = project.name + "-" + project.version + ".jar"
+}
+
+shadowJar.finalizedBy javadoc
+shadowJar.finalizedBy sourcesJar

@@ -9,6 +9,10 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 public class FileUtil {
+    /**
+     * Method to save resource from "resources" folder to local files
+     * @param name Name of resource file
+     */
     @SneakyThrows
     public static void saveResource(String name) {
         File file = new File(name);
