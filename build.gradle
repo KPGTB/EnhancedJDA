@@ -61,7 +61,7 @@ publishing {
             pom {
                 name = 'EnhancedJDA'
                 description = 'EnhancedJDA is an advanced library that enhances the Java Discord API for creating powerful Discord bots'
-                url = 'https:/projectenhanced.dev'
+                url = 'https://projectenhanced.dev'
                 inceptionYear = '2024'
                 licenses {
                     license {
