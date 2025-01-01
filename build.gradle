@@ -1,11 +1,16 @@
 plugins {
     id "java-library"
+
     id "com.github.johnrengelman.shadow" version "8.1.1"
     id "io.freefair.lombok" version "8.11"
+
+    id "maven-publish"
+    id 'org.jreleaser' version '1.16.0'
 }
 
 group = "dev.projectenhanced"
-version = "1.0-SNAPSHOT"
+version = "1.0.0"
+description = 'EnhancedJDA is an advanced library that enhances the Java Discord API for creating powerful Discord bots'
 
 repositories {
     mavenCentral()
@@ -38,3 +43,71 @@ shadowJar {
 
 shadowJar.finalizedBy javadoc
 shadowJar.finalizedBy sourcesJar
+
+publishing {
+    repositories {
+        maven {
+            url = layout.buildDirectory.dir('staging-deploy')
+        }
+    }
+
+    publications {
+        maven(MavenPublication) {
+            groupId = 'dev.projectenhanced'
+            artifactId = 'EnhancedJDA'
+
+            from components.java
+
+            pom {
+                name = 'EnhancedJDA'
+                description = 'EnhancedJDA is an advanced library that enhances the Java Discord API for creating powerful Discord bots'
+                url = 'https:/projectenhanced.dev'
+                inceptionYear = '2024'
+                licenses {
+                    license {
+                        name = 'Apache-2.0'
+                        url = 'https://spdx.org/licenses/Apache-2.0.html'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'kpgtb'
+                        name = 'KPG-TB'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/KPGTB/EnhancedJDA.git'
+                    developerConnection = 'scm:git:ssh://github.com/KPGTB/EnhancedJDA.git'
+                    url = 'https://github.com/KPGTB/EnhancedJDA'
+                }
+            }
+        }
+    }
+}
+
+jreleaser {
+    release{
+        github {
+            skipRelease = true
+            skipTag = true
+        }
+    }
+    signing {
+        active = 'ALWAYS'
+        armored = true
+        mode = 'FILE'
+        publicKey = 'C:\\Users\\kokkr\\.gnupg\\public.pgp'
+        secretKey = 'C:\\Users\\kokkr\\.gnupg\\private.pgp'
+    }
+    deploy {
+        maven {
+            mavenCentral {
+                sonatype {
+                    active = 'ALWAYS'
+                    url = 'https://central.sonatype.com/api/v1/publisher'
+                    stagingRepository('build/staging-deploy')
+                }
+            }
+        }
+    }
+}
