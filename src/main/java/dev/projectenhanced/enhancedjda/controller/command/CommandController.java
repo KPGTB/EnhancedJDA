@@ -39,7 +39,7 @@ public class CommandController extends ListenerAdapter {
             int errors = 0;
         };
 
-        ReflectionUtil.getAllClassesInPackage(bot.getClass(), packageName, EnhancedCommand.class)
+        ReflectionUtil.getAllClassesInPackage(bot.getPackageClass(packageName), packageName, EnhancedCommand.class)
                 .forEach(clazz -> {
                     ref.found++;
                     try {
@@ -73,11 +73,11 @@ public class CommandController extends ListenerAdapter {
             int errors = 0;
         };
 
-        ReflectionUtil.getAllClassesInPackage(bot.getClass(), packageName, EnhancedContext.class)
+        ReflectionUtil.getAllClassesInPackage(bot.getPackageClass(packageName), packageName, EnhancedContext.class)
                 .forEach(clazz -> {
                     ref.found++;
                     try {
-                        EnhancedContext context = (EnhancedContext) clazz.getDeclaredConstructor(EnhancedBot.class).newInstance(this.bot);
+                        EnhancedContext<?> context = (EnhancedContext<?>) clazz.getDeclaredConstructor(EnhancedBot.class).newInstance(this.bot);
                         ref.registered++;
 
                         if(context.getGuilds().isEmpty()) {

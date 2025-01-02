@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "dev.projectenhanced"
-version = "1.0.0"
+version = "1.0.1"
 description = 'EnhancedJDA is an advanced library that enhances the Java Discord API for creating powerful Discord bots'
 
 repositories {
@@ -17,16 +17,16 @@ repositories {
 }
 
 dependencies {
-    api "net.dv8tion:JDA:5.2.1"
+    api "net.dv8tion:JDA:5.2.2"
     api 'io.github.cdimascio:dotenv-java:3.1.0'
     api "com.j256.ormlite:ormlite-jdbc:6.1"
     api 'com.google.code.gson:gson:2.11.0'
+    api "ch.qos.logback:logback-classic:1.5.15"
 
-    implementation "ch.qos.logback:logback-classic:1.5.6"
     implementation 'org.xerial:sqlite-jdbc:3.47.1.0'
-    implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.10.3'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.3'
+    implementation 'com.mysql:mysql-connector-j:9.1.0'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
 }
 
 java {

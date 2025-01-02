@@ -43,6 +43,7 @@ public abstract class EnhancedContext<T> extends ListenerAdapter {
     protected abstract void execute(GenericContextInteractionEvent<T> event);
 
     @Override
+    @SuppressWarnings("unchecked")
     public void onGenericContextInteraction(GenericContextInteractionEvent<?> event) {
         if(event.getName().equalsIgnoreCase(this.data.getName())) {
             execute((GenericContextInteractionEvent<T>) event);

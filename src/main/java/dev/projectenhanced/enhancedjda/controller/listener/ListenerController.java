@@ -26,7 +26,7 @@ public class ListenerController {
         };
 
         bot.getShardManager().addEventListener(
-                ReflectionUtil.getAllClassesInPackage(bot.getClass(), packageName,EnhancedListener.class)
+                ReflectionUtil.getAllClassesInPackage(bot.getPackageClass(packageName), packageName,EnhancedListener.class)
                         .stream().map(clazz -> {
                             ref.found++;
                             try {

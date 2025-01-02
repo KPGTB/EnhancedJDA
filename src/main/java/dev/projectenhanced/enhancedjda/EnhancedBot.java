@@ -149,6 +149,14 @@ public class EnhancedBot {
     }
 
     /**
+     * Get main class from package name
+     * @param packageName Name of package
+     */
+    public Class<?> getPackageClass(String packageName) {
+        return packageName.startsWith(this.enhancedPackage) ? this.getClass().getSuperclass() : this.getClass();
+    }
+
+    /**
      * Method invoked just before building shard manager. You can modify builder
      * @param builder
      */

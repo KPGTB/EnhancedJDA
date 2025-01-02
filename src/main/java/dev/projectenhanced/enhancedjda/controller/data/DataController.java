@@ -86,7 +86,7 @@ public class DataController {
         if(this.connectionSource == null) {
             return;
         }
-        for(Class<?> clazz : ReflectionUtil.getAllClassesInPackage(this.bot.getClass(), packageName)) {
+        for(Class<?> clazz : ReflectionUtil.getAllClassesInPackage(this.bot.getPackageClass(packageName), packageName)) {
             if(!DataPersister.class.isAssignableFrom(clazz)) {
                 continue;
             }
@@ -108,7 +108,7 @@ public class DataController {
         if(this.connectionSource == null) {
             return;
         }
-        for(Class<?> clazz : ReflectionUtil.getAllClassesInPackage(this.bot.getClass(), packageName)) {
+        for(Class<?> clazz : ReflectionUtil.getAllClassesInPackage(this.bot.getPackageClass(packageName), packageName)) {
             if(clazz.getDeclaredAnnotation(DatabaseTable.class) == null) {
                 continue;
             }
