@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
@@ -63,7 +64,7 @@ public class DataController {
                 e.printStackTrace();
                 return;
             }
-        } else {
+        } else if (databaseStr.startsWith("jdbc:mysql")){
             try {
                 this.connectionSource = new JdbcPooledConnectionSource(databaseStr, new MysqlDatabaseType());
             } catch (SQLException e) {
@@ -72,6 +73,10 @@ public class DataController {
                 e.printStackTrace();
                 return;
             }
+        } else {
+            this.connectionSource = null;
+            EnhancedLogger.getLogger().error("Unknown database type");
+            return;
         }
 
         LoggerFactory.setLogBackendFactory(LogBackendType.NULL);
@@ -86,18 +91,42 @@ public class DataController {
         if(this.connectionSource == null) {
             return;
         }
+        var ref = new Object() {
+            int registered = 0;
+            int found = 0;
+            int errors = 0;
+        };
+
         for(Class<?> clazz : ReflectionUtil.getAllClassesInPackage(this.bot.getPackageClass(packageName), packageName)) {
             if(!DataPersister.class.isAssignableFrom(clazz)) {
                 continue;
             }
+            ref.found++;
             try {
-                DataPersister persister = (DataPersister) clazz.getDeclaredConstructor().newInstance();
+                DataPersister persister = null;
+                for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
+                    int params = constructor.getParameterCount();
+                    switch (params) {
+                        case 0 -> {
+                            persister = (DataPersister) constructor.newInstance();
+                        }
+                        case 1 -> {
+                            if(constructor.getParameterTypes()[0].isAssignableFrom(EnhancedBot.class)) {
+                                persister = (DataPersister) constructor.newInstance(this.bot);
+                            }
+                        }
+                    }
+                    if(persister != null) break;
+                }
                 DataPersisterManager.registerDataPersisters(persister);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                     NoSuchMethodException e) {
+                ref.registered++;
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+                ref.errors++;
                 e.printStackTrace();
             }
         }
+
+        EnhancedLogger.getLogger().info("Registered {}/{} persisters from {}. Errors: {}", ref.registered,ref.found,packageName,ref.errors);
     }
 
     /**
@@ -108,10 +137,18 @@ public class DataController {
         if(this.connectionSource == null) {
             return;
         }
+
+        var ref = new Object() {
+            int registered = 0;
+            int found = 0;
+            int errors = 0;
+        };
+
         for(Class<?> clazz : ReflectionUtil.getAllClassesInPackage(this.bot.getPackageClass(packageName), packageName)) {
             if(clazz.getDeclaredAnnotation(DatabaseTable.class) == null) {
                 continue;
             }
+            ref.found++;
             Field idField = null;
             for(Field f : clazz.getDeclaredFields()) {
                 DatabaseField databaseField = f.getDeclaredAnnotation(DatabaseField.class);
@@ -125,12 +162,14 @@ public class DataController {
                 break;
             }
             if(idField == null) {
-                return;
+                ref.errors++;
+                continue;
             }
 
             try {
                 TableUtils.createTableIfNotExists(this.connectionSource, clazz);
             } catch (SQLException e) {
+                ref.errors++;
                 e.printStackTrace();
                 continue;
             }
@@ -139,12 +178,16 @@ public class DataController {
             try {
                 dao = DaoManager.createDao(this.connectionSource, clazz);
                 dao.setObjectCache(true);
+                ref.registered++;
             } catch (SQLException e) {
+                ref.errors++;
                 e.printStackTrace();
                 continue;
             }
             this.daosMap.put(clazz, dao);
         }
+
+        EnhancedLogger.getLogger().info("Registered {}/{} tables from {}. Errors: {}", ref.registered,ref.found,packageName,ref.errors);
     }
 
     /**

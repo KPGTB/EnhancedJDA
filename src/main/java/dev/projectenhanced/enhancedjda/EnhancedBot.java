@@ -132,11 +132,12 @@ public class EnhancedBot {
     }
 
     private void enableDatabase() {
-        if(packageMapping != null) {
+        if(packageMapping != null && packageMapping.tables().length > 0) {
             this.dataController.enable();
 
             List<String> persisterPackages = new ArrayList<>();
             persisterPackages.add(this.enhancedPackage + ".controller.data.persister.base");
+            persisterPackages.add(this.enhancedPackage + ".controller.data.persister.jda");
             persisterPackages.addAll(Arrays.stream(packageMapping.persisters()).map(pkg -> this.botPackage + "." + pkg).toList());
             persisterPackages.forEach(this.dataController::registerPersisters);
 

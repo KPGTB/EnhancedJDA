@@ -13,15 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MapPersister extends LongStringType {
-    private static final MapPersister SINGLETON = new MapPersister();
     private final String NONE_TAG = "NONE";
 
     public MapPersister() {
         super(SqlType.LONG_STRING, new Class[]{Map.class});
-    }
-
-    public static MapPersister getSingleton() {
-        return SINGLETON;
     }
 
     @Override

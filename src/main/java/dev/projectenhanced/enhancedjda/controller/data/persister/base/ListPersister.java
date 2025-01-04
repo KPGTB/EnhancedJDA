@@ -13,15 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ListPersister extends LongStringType {
-    private static final ListPersister SINGLETON = new ListPersister();
     private final String NONE_TAG = "NONE";
 
     public ListPersister() {
         super(SqlType.LONG_STRING, new Class[]{List.class});
-    }
-
-    public static ListPersister getSingleton() {
-        return SINGLETON;
     }
 
     @Override
