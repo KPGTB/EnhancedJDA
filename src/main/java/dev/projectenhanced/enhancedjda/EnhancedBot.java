@@ -55,13 +55,15 @@ public class EnhancedBot {
         this.packageMapping = getClass().getDeclaredAnnotation(PackageMapping.class);
 
         File envFile = new File(".env");
-        if(!envFile.exists()) {
-            FileUtil.saveResource(".env");
-            EnhancedLogger.getLogger().error("Created file .env ("+envFile.getAbsolutePath()+") - please configure it!");
-            new Scanner(System.in).nextLine();
-            System.exit(0);
+        if(!envFile.exists() &&
+                !new File(".env.example").exists()) {
+            FileUtil.saveResource(".env.example");
+            EnhancedLogger.getLogger().error("Created file .env.example ("+envFile.getAbsolutePath()+") - please configure it and rename to .env!");
         }
-        this.dotenv = Dotenv.configure().load();
+
+        this.dotenv = Dotenv.configure()
+                .ignoreIfMissing()
+                .load();
 
         DefaultShardManagerBuilder builder = DefaultShardManagerBuilder.createDefault(dotenv.get("TOKEN"));
         enableIntents(builder);

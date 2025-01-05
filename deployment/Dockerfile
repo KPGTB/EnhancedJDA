@@ -1,4 +1,4 @@
-FROM amazoncorretto:21
+FROM azul/zulu-openjdk-alpine:17-latest
 
 RUN mkdir /app
 COPY *.jar /app/bot.jar

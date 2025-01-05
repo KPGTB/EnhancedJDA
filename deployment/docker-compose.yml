@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  bot:
+    container_name: discord-bot
+    build: .
+    restart: unless-stopped
+    environment:
+      - ENV=DEV
+      - TOKEN=YOUR_TOKEN
+      - DATABASE=SQLITE
+    volumes:
+      - '/var/log/discord-bot:/app/logs'
+      - '/opt/discord-bot/config:/app/config'
+      - '/opt/discord-bot/database.db:/app/database.db'
