@@ -1,5 +1,9 @@
 # EnhancedJDA - Changelog
 
+## 1.0.3 - Soon
+
+- Improved handling .env
+
 ## 1.0.2 - 04.01.2025
 
 - Controller won't try to connect with database when it's useless

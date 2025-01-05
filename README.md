@@ -15,8 +15,8 @@
 <p align="center">
     <a href="https://projectenhanced.dev" target="_blank">
        Documentation
-    </a> & <a href="./deployment/INSTALLATION.md">
-       Bot Installer Creation
+    </a> & <a href="https://projectenhanced.dev/enhancedjda/deployment">
+       Bot Installer Creator
     </a>
 </p>
 

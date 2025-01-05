@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "dev.projectenhanced"
-version = "1.0.2"
+version = "1.0.3"
 description = 'EnhancedJDA is an advanced library that enhances the Java Discord API for creating powerful Discord bots'
 
 repositories {

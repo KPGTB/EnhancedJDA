@@ -5,9 +5,9 @@ services:
     build: .
     restart: unless-stopped
     environment:
-      - ENV=DEV
-      - TOKEN=YOUR_TOKEN
-      - DATABASE=SQLITE
+      - ENV=<DEV / PRODUCTION>
+      - TOKEN=<DISCORD BOT TOKEN>
+      - DATABASE=<SQLITE or MYSQL Connection URL>
     volumes:
       - '/var/log/discord-bot:/app/logs'
       - '/opt/discord-bot/config:/app/config'
