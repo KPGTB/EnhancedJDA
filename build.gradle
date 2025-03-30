@@ -47,7 +47,15 @@ shadowJar.finalizedBy sourcesJar
 publishing {
     repositories {
         maven {
-            url = layout.buildDirectory.dir('staging-deploy')
+            credentials {
+                username project.nexusUsername
+                password project.nexusPassword
+            }
+            if (project.version.endsWith("-SNAPSHOT")) {
+                url "https://nexus.projectenhanced.dev/repository/maven-snapshots"
+            } else {
+                url layout.buildDirectory.dir('staging-deploy')
+            }
         }
     }
 
